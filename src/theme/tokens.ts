@@ -19,7 +19,8 @@ export const colors = {
   danger: "#E5484D",
   dangerSoft: "#FCE8E8",
   dangerInk: "#B42318",
-  alert: "#F25C45", // panic button: warm red, ink text on top
-  alertHover: "#F4705B",
+  alert: "#F25C45", // panic button border/accent; button is white, pastel red on hover
   alertSoft: "#FDE9E5",
+  alertPastel: "#FDE2DC",
+  mintDeep: "#2B7F60", // "Your next task" card (white text 4.9:1)
 } as const;
