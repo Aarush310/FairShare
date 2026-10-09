@@ -33,21 +33,21 @@ export function Home() {
         <Eyebrow>{project.course} · {project.name}</Eyebrow>
         <h1 id="greet" className="mt-1 text-[34px] font-bold leading-10 md:text-[40px] md:leading-[48px]">Hi, {first(me.name)}</h1>
         {next ? (
-          <div className="mt-4 rounded-[22px] bg-mint-deep p-5 text-white shadow-[0_18px_40px_-14px_rgb(43_127_96/0.6)] md:p-6">
-            <Eyebrow className="text-[#D7F5E6]">Your next task</Eyebrow>
-            <p className="mt-1.5 text-[26px] font-bold leading-8 tracking-[-0.03em] text-white">{next.title}</p>
-            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-white/80">
-              <span><span className="numeral text-[20px] font-bold text-white">{next.points}</span> pts</span>
-              <span className={dueLabel(next.due).overdue ? "font-semibold text-[#FFD9D1]" : ""}><CalendarDays size={14} className="mr-1 inline" aria-hidden />{dueLabel(next.due).text}</span>
-              {next.status === "doing" && <span className="inline-flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-volt" aria-hidden /> In progress</span>}
+          <div className="mt-4 rounded-[22px] bg-mint-mid p-5 text-ink shadow-[0_18px_40px_-16px_rgb(43_127_96/0.45)] md:p-6">
+            <Eyebrow className="text-forest">Your next task</Eyebrow>
+            <p className="mt-1.5 text-[26px] font-bold leading-8 tracking-[-0.03em] text-ink">{next.title}</p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-ink-3">
+              <span><span className="numeral text-[20px] font-bold text-ink">{next.points}</span> pts</span>
+              <span className={dueLabel(next.due).overdue ? "font-semibold text-danger-ink" : ""}><CalendarDays size={14} className="mr-1 inline" aria-hidden />{dueLabel(next.due).text}</span>
+              {next.status === "doing" && <span className="inline-flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-forest" aria-hidden /> In progress</span>}
             </div>
-            {next.reason && <p className="mt-3 rounded-2xl bg-white/[0.12] px-3.5 py-2.5 text-[13px] text-white/90">Why you: {next.reason}</p>}
+            {next.reason && <p className="mt-3 rounded-2xl bg-white/50 px-3.5 py-2.5 text-[13px] text-ink-3">Why you: {next.reason}</p>}
             <div className="mt-5 flex flex-wrap gap-2">
               {next.status === "todo"
-                ? <button className="btn bg-white text-ink hover:bg-mint" onClick={() => setStatus(next.id, "doing")}><Play size={17} aria-hidden /> Start this task</button>
-                : <button className="btn bg-white text-ink hover:bg-mint" onClick={() => setStatus(next.id, "done")}><Check size={17} strokeWidth={2.6} aria-hidden /> Mark as done</button>}
-              <Link to="/board" className="btn text-white hover:bg-white/10">See all my tasks</Link>
-              <button className="btn ml-auto bg-white/10 text-white hover:bg-alert-pastel hover:text-danger-ink" onClick={() => openPanic(next.id)}><LifeBuoy size={17} aria-hidden /> Stuck on this?</button>
+                ? <button className="btn-primary" onClick={() => setStatus(next.id, "doing")}><Play size={17} aria-hidden /> Start this task</button>
+                : <button className="btn-primary" onClick={() => setStatus(next.id, "done")}><Check size={17} strokeWidth={2.6} aria-hidden /> Mark as done</button>}
+              <Link to="/board" className="btn text-ink hover:bg-white/40">See all my tasks</Link>
+              <button className="btn ml-auto bg-white text-danger-ink hover:bg-alert-pastel" onClick={() => openPanic(next.id)}><LifeBuoy size={17} aria-hidden /> Stuck on this?</button>
             </div>
           </div>
         ) : (

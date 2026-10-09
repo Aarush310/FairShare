@@ -22,5 +22,5 @@ export const colors = {
   alert: "#F25C45", // panic button border/accent; button is white, pastel red on hover
   alertSoft: "#FDE9E5",
   alertPastel: "#FDE2DC",
-  mintDeep: "#2B7F60", // "Your next task" card (white text 4.9:1)
+  mintMid: "#86D6B2", // "Your next task" card (ink text; forest green labels)
 } as const;
