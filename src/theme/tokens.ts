@@ -19,4 +19,7 @@ export const colors = {
   danger: "#E5484D",
   dangerSoft: "#FCE8E8",
   dangerInk: "#B42318",
+  alert: "#F25C45", // panic button: warm red, ink text on top
+  alertHover: "#F4705B",
+  alertSoft: "#FDE9E5",
 } as const;

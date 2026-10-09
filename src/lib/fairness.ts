@@ -206,6 +206,30 @@ export function proposePanicSplit(memberId: string, members: Member[], tasks: Ta
   return moves;
 }
 
+/**
+ * Per-task help request from the board: hand this one task (not started or in progress)
+ * to the teammate with the most spare capacity, with a bonus for matching skills.
+ */
+export function proposeTaskHandoff(taskId: string, members: Member[], tasks: Task[]): Move | null {
+  const t = tasks.find((x) => x.id === taskId);
+  if (!t || !t.assigneeId || t.status === "done") return null;
+  const { remaining, target } = remainingTargets(members, tasks);
+  const others = members.filter((m) => m.id !== t.assigneeId).sort(byId);
+  if (others.length === 0) return null;
+  const spare = (m: Member) => target[m.id] - remaining[m.id];
+  const score = (m: Member) => spare(m) + (skillMatch(m, t).length > 0 ? 2 : 0);
+  const to = others.reduce((a, b) => (score(b) > score(a) ? b : a));
+  const skills = skillMatch(to, t);
+  return {
+    taskId: t.id,
+    fromId: t.assigneeId,
+    toId: to.id,
+    reason: skills.length
+      ? `${first(to.name)} knows ${skills.join(" & ")} and has ${round(Math.max(0, spare(to)))} pts spare`
+      : `${first(to.name)} has the most spare capacity (${round(Math.max(0, spare(to)))} pts)`,
+  };
+}
+
 export function movesSignature(moves: Move[]): string {
   return moves.map((m) => `${m.taskId}:${m.fromId}>${m.toId}`).join("|");
 }

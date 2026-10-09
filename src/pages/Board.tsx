@@ -1,6 +1,7 @@
-import { ArrowLeft, ArrowRight, Link2, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Hourglass, LifeBuoy, Link2, Sparkles } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useOutletContext } from "react-router";
+import type { LayoutContext } from "../components/Layout";
 import { Avatar, Empty, Modal, PointsChip } from "../components/ui";
 import { first } from "../lib/fairness";
 import { currentProject, useStore } from "../lib/store";
@@ -15,6 +16,7 @@ const columns: { id: Status; label: string }[] = [
 ];
 
 export function Board() {
+  const { openPanic } = useOutletContext<LayoutContext>();
   const project = useStore(currentProject);
   const meId = useStore((s) => s.currentUserId);
   const setStatus = useStore((s) => s.setStatus);
@@ -63,18 +65,36 @@ export function Board() {
                   {c.id === "todo" ? "Nothing waiting. Nice!" : c.id === "done" ? "Finished tasks land here." : "Drag a task here, or use the arrows on a card."}
                 </p>
               )}
-              {list.map((t) => <TaskCard key={t.id} task={t} onOpen={() => setOpen(t.id)} />)}
+              {list.map((t) => <TaskCard key={t.id} task={t} onOpen={() => setOpen(t.id)} onHelp={() => openPanic(t.id)} />)}
             </section>
           );
         })}
       </div>
       {project.tasks.length === 0 && <Empty icon={<Sparkles size={32} />} title="No tasks yet">Paste your assignment brief on the <Link className="underline" to="/plan">New plan</Link> page and Fairshare will draft the tasks.</Empty>}
-      {openTask && <TaskDialog task={openTask} onClose={() => setOpen(null)} />}
+      {openTask && <TaskDialog task={openTask} onClose={() => setOpen(null)} onHelp={() => { setOpen(null); openPanic(openTask.id); }} />}
     </div>
   );
 }
 
-function TaskCard({ task, onOpen }: { task: Task; onOpen: () => void }) {
+/** Whether this task already has an open help request waiting on a teammate. */
+function useHelpPending(taskId: string) {
+  return useStore((s) => s.panics.some((r) => r.status === "open" && r.responses[taskId] === "pending"));
+}
+
+/** Warm red "ask for help" button, shown only on your own unfinished tasks. */
+function HelpButton({ task, onHelp, wide = false }: { task: Task; onHelp: () => void; wide?: boolean }) {
+  const meId = useStore((s) => s.currentUserId);
+  const pending = useHelpPending(task.id);
+  if (task.assigneeId !== meId || task.status === "done") return null;
+  if (pending) return <span className="chip self-start bg-alert-soft text-danger-ink"><Hourglass size={13} aria-hidden /> Help requested</span>;
+  return (
+    <button className={`btn-alert min-h-11 px-4 text-[14px] ${wide ? "" : "self-start"}`} onClick={onHelp}>
+      <LifeBuoy size={16} strokeWidth={2.4} aria-hidden /> Need help with this?
+    </button>
+  );
+}
+
+function TaskCard({ task, onOpen, onHelp }: { task: Task; onOpen: () => void; onHelp: () => void }) {
   const member = useStore((s) => s.members.find((m) => m.id === task.assigneeId));
   const meId = useStore((s) => s.currentUserId);
   const setStatus = useStore((s) => s.setStatus);
@@ -96,11 +116,12 @@ function TaskCard({ task, onOpen }: { task: Task; onOpen: () => void }) {
         {next && <button className="btn-ghost min-h-11 px-2" aria-label={`Move to ${next.label}`} onClick={() => setStatus(task.id, next.id)}><ArrowRight size={18} /></button>}
       </div>
       {task.reason && <p className="mt-1 line-clamp-2 text-xs text-muted" title={task.reason}>{task.reason}</p>}
+      <div className="mt-3 flex empty:hidden"><HelpButton task={task} onHelp={onHelp} /></div>
     </article>
   );
 }
 
-function TaskDialog({ task, onClose }: { task: Task; onClose: () => void }) {
+function TaskDialog({ task, onClose, onHelp }: { task: Task; onClose: () => void; onHelp: () => void }) {
   const members = useStore((s) => s.members);
   const project = useStore(currentProject);
   const setStatus = useStore((s) => s.setStatus);
@@ -134,7 +155,10 @@ function TaskDialog({ task, onClose }: { task: Task; onClose: () => void }) {
             <ul className="ml-5 list-disc">{deps.map((d) => <li key={d.id}>{d.title} <span className="text-muted">({columns.find((c) => c.id === d.status)?.label})</span></li>)}</ul>
           </div>
         )}
-        <button className="btn-primary" onClick={onClose}>Done</button>
+        <div className="flex flex-wrap gap-2 [&>*]:flex-1">
+          <HelpButton task={task} onHelp={onHelp} wide />
+          <button className="btn-primary" onClick={onClose}>Done</button>
+        </div>
       </div>
     </Modal>
   );

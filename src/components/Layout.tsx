@@ -78,7 +78,8 @@ function Toasts() {
 }
 
 export function Layout() {
-  const [panic, setPanic] = useState(false);
+  // false = closed, true = general request, string = help with one task
+  const [panic, setPanic] = useState<boolean | string>(false);
   const [bell, setBell] = useState(false);
   const project = useStore(currentProject);
   const me = useStore((s) => s.members.find((m) => m.id === s.currentUserId));
@@ -129,7 +130,7 @@ export function Layout() {
 
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden xl:inline-flex"><NotionBadge /></span>
-            <button className="btn-secondary hidden h-11 lg:inline-flex" onClick={() => setPanic(true)}><LifeBuoy size={16} aria-hidden /> I'm overloaded</button>
+            <button className="btn-alert h-11 px-3 lg:px-5" onClick={() => setPanic(true)} aria-label="I'm overloaded"><LifeBuoy size={18} strokeWidth={2.4} aria-hidden /><span className="hidden lg:inline">I'm overloaded</span></button>
             <BellButton />
             <span className="glass hidden h-11 items-center gap-2 rounded-full py-1 pl-1 pr-3.5 md:inline-flex" title={me?.role === "lead" ? "Team lead" : "Member"}>
               <Avatar member={me} size={34} />
@@ -140,7 +141,7 @@ export function Layout() {
       </header>
 
       <main id="main" className="mx-auto w-full max-w-6xl px-4 pb-28 pt-2 md:px-6 md:pb-12">
-        <Outlet context={{ openPanic: () => setPanic(true) } satisfies LayoutContext} />
+        <Outlet context={{ openPanic: (taskId?: string) => setPanic(taskId ?? true) } satisfies LayoutContext} />
       </main>
 
       {/* Mobile bottom tab bar */}
@@ -153,14 +154,14 @@ export function Layout() {
         ))}
       </nav>
 
-      {panic && <PanicDialog onClose={() => setPanic(false)} />}
+      {panic && <PanicDialog taskId={typeof panic === "string" ? panic : undefined} onClose={() => setPanic(false)} />}
       {bell && <Notifications onClose={() => setBell(false)} />}
       <Toasts />
     </div>
   );
 }
 
-export interface LayoutContext { openPanic: () => void }
+export interface LayoutContext { openPanic: (taskId?: string) => void }
 
 export function SidePanel({ children }: { children: ReactNode }) {
   return <aside className="flex flex-col gap-4 lg:sticky lg:top-24 lg:self-start">{children}</aside>;

@@ -3,7 +3,7 @@
 // whether the team has drifted enough to need a rebalance proposal.
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { distribute, first, movesSignature, proposePanicSplit, proposeRebalance } from "./fairness";
+import { distribute, first, movesSignature, proposePanicSplit, proposeRebalance, proposeTaskHandoff } from "./fairness";
 import { buildDigest, lastMonday9, nudgesFor } from "./insights";
 import type { Plan } from "./planner";
 import { DAY, daysFrom, seedMembers, seedProject } from "./seed";
@@ -38,7 +38,7 @@ interface Actions {
   vote(proposalId: string, vote: Vote): void;
   setAutoApply(on: boolean): void;
   setPushEnabled(on: boolean): void;
-  draftPanic(memberId: string): Move[];
+  draftPanic(memberId: string, taskId?: string): Move[];
   sendPanic(memberId: string, reason: string, moves: Move[]): void;
   respondPanic(requestId: string, taskId: string, response: PanicResponse): void;
   simulateProgress(memberId: string): void;
@@ -258,7 +258,11 @@ export const useStore = create<State>()(
         setAutoApply: (on) => commit((d) => ({ ...d, settings: { ...d.settings, autoApply: on } }), on ? "Auto-apply is on" : "Auto-apply is off"),
         setPushEnabled: (on) => commit((d) => ({ ...d, settings: { ...d.settings, pushEnabled: on } }), on ? "Notifications on" : "Notifications off", false),
 
-        draftPanic: (mid) => proposePanicSplit(mid, get().members, project().tasks),
+        draftPanic: (mid, taskId) => {
+          if (!taskId) return proposePanicSplit(mid, get().members, project().tasks);
+          const move = proposeTaskHandoff(taskId, get().members, project().tasks);
+          return move ? [move] : [];
+        },
 
         sendPanic: (mid, reason, moves) => commit((d, now) => {
           const req: PanicRequest = {

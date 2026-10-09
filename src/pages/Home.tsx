@@ -33,20 +33,21 @@ export function Home() {
         <Eyebrow>{project.course} · {project.name}</Eyebrow>
         <h1 id="greet" className="mt-1 text-[34px] font-bold leading-10 md:text-[40px] md:leading-[48px]">Hi, {first(me.name)}</h1>
         {next ? (
-          <div className="card-ink mt-4 p-5 md:p-6">
-            <Eyebrow className="text-volt">Your next task</Eyebrow>
-            <p className="mt-1.5 text-[26px] font-bold leading-8 tracking-[-0.03em] text-white">{next.title}</p>
-            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-white/60">
-              <span><span className="numeral text-[20px] font-bold text-white">{next.points}</span> pts</span>
-              <span className={dueLabel(next.due).overdue ? "font-semibold text-[#FF8A80]" : ""}><CalendarDays size={14} className="mr-1 inline" aria-hidden />{dueLabel(next.due).text}</span>
+          <div className="mt-4 rounded-[22px] border border-green/25 bg-gradient-to-br from-mint via-[#EEF9F1] to-[#F6FBEA] p-5 shadow-soft md:p-6">
+            <Eyebrow>Your next task</Eyebrow>
+            <p className="mt-1.5 text-[26px] font-bold leading-8 tracking-[-0.03em]">{next.title}</p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-muted">
+              <span><span className="numeral text-[20px] font-bold text-ink">{next.points}</span> pts</span>
+              <span className={dueLabel(next.due).overdue ? "font-semibold text-danger-ink" : ""}><CalendarDays size={14} className="mr-1 inline" aria-hidden />{dueLabel(next.due).text}</span>
               {next.status === "doing" && <span className="inline-flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-green" aria-hidden /> In progress</span>}
             </div>
-            {next.reason && <p className="mt-3 rounded-2xl bg-white/[0.06] px-3.5 py-2.5 text-[13px] text-white/75">Why you: {next.reason}</p>}
+            {next.reason && <p className="mt-3 rounded-2xl bg-white/70 px-3.5 py-2.5 text-[13px] text-ink-3 ring-1 ring-black/[0.04]">Why you: {next.reason}</p>}
             <div className="mt-5 flex flex-wrap gap-2">
               {next.status === "todo"
-                ? <button className="btn-volt" onClick={() => setStatus(next.id, "doing")}><Play size={17} aria-hidden /> Start this task</button>
-                : <button className="btn-volt" onClick={() => setStatus(next.id, "done")}><Check size={17} strokeWidth={2.6} aria-hidden /> Mark as done</button>}
-              <Link to="/board" className="btn text-white/80 hover:bg-white/10 hover:text-white">See all my tasks</Link>
+                ? <button className="btn-primary" onClick={() => setStatus(next.id, "doing")}><Play size={17} aria-hidden /> Start this task</button>
+                : <button className="btn-primary" onClick={() => setStatus(next.id, "done")}><Check size={17} strokeWidth={2.6} aria-hidden /> Mark as done</button>}
+              <Link to="/board" className="btn-ghost">See all my tasks</Link>
+              <button className="btn ml-auto text-danger-ink hover:bg-alert-soft" onClick={() => openPanic(next.id)}><LifeBuoy size={17} aria-hidden /> Stuck on this?</button>
             </div>
           </div>
         ) : (
@@ -55,7 +56,7 @@ export function Home() {
         {pace && (
           <p className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl bg-mint py-2 pl-4 pr-2 text-[15px] text-forest">
             <span className="flex-1">{pace.body}</span>
-            <button className="btn min-h-9 bg-surface px-4 text-ink shadow-float" onClick={openPanic}>Get help</button>
+            <button className="btn min-h-9 bg-surface px-4 text-ink shadow-float" onClick={() => openPanic()}>Get help</button>
           </p>
         )}
       </section>
@@ -115,7 +116,7 @@ export function Home() {
       </section>
       <section className="card flex flex-col gap-2 p-5">
         <p className="text-sm text-muted">{myStats ? `You're carrying ${myStats.remaining} pts right now.` : ""} Feeling stretched?</p>
-        <button className="btn-secondary" onClick={openPanic}><LifeBuoy size={18} aria-hidden /> I'm overloaded</button>
+        <button className="btn-alert" onClick={() => openPanic()}><LifeBuoy size={18} strokeWidth={2.4} aria-hidden /> I'm overloaded</button>
         <Link to="/plan" className="btn-ghost"><Sparkles size={18} aria-hidden /> Plan a new project</Link>
       </section>
     </>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { balanceOf, distribute, fairShares, memberStats, projectCompletion, proposePanicSplit, proposeRebalance } from "./fairness";
+import { balanceOf, distribute, fairShares, memberStats, projectCompletion, proposePanicSplit, proposeRebalance, proposeTaskHandoff } from "./fairness";
 import { seedMembers, seedProject } from "./seed";
 import type { Task } from "./types";
 
@@ -82,6 +82,16 @@ describe("rebalance", () => {
 
   it("is deterministic", () => {
     expect(proposeRebalance(seedMembers, project().tasks)).toEqual(proposeRebalance(seedMembers, project().tasks));
+  });
+});
+
+describe("per-task help", () => {
+  it("hands an in-progress task to a teammate, preferring matching skills", () => {
+    const move = proposeTaskHandoff("t03", seedMembers, project().tasks); // Aoife's literature review (writing, research)
+    expect(move).toMatchObject({ taskId: "t03", fromId: "m1", toId: "m2" });
+  });
+  it("refuses done tasks", () => {
+    expect(proposeTaskHandoff("t01", seedMembers, project().tasks)).toBeNull();
   });
 });
 
