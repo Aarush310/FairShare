@@ -11,7 +11,7 @@ function MoveRow({ move }: { move: Move }) {
   const from = members.find((m) => m.id === move.fromId);
   const to = members.find((m) => m.id === move.toId);
   return (
-    <li className="rounded-[12px] bg-bone p-3">
+    <li className="rounded-2xl bg-surface-alt p-3">
       <p className="font-semibold">{t?.title}</p>
       <p className="mt-1 flex flex-wrap items-center gap-1.5 text-sm">
         <PointsChip points={t?.points ?? 0} />
@@ -30,9 +30,9 @@ export function RebalanceCard() {
   const members = useStore((s) => s.members);
   if (!proposal) return null;
   return (
-    <section className="card border-2 border-mint p-4" aria-labelledby="rb-title">
+    <section className="card p-5 ring-2 ring-green/70" aria-labelledby="rb-title">
       <div className="mb-2 flex items-center gap-2">
-        <Scale size={20} className="text-green" aria-hidden />
+        <Scale size={20} className="text-ink" aria-hidden />
         <h2 id="rb-title" className="flex-1 text-lg font-bold">A small rebalance</h2>
         <span className="text-sm text-muted">{ago(proposal.createdAt)}</span>
       </div>
@@ -66,18 +66,18 @@ export function HelpRequests({ showResolved = false }: { showResolved?: boolean 
       {list.map((r) => (
         <div key={r.id} className="card p-4">
           <div className="mb-2 flex items-center gap-2">
-            <HandHeart size={20} className="text-green" aria-hidden />
+            <HandHeart size={20} className="text-ink" aria-hidden />
             <h3 className="flex-1 font-bold">{r.memberId === me ? "Your help request" : `${name(r.memberId)} could use a hand`}</h3>
             <span className="text-sm text-muted">{ago(r.createdAt)}</span>
           </div>
-          {r.reason && (r.memberId === me || meIsLead) && <p className="mb-2 rounded-[12px] bg-mint-pale px-3 py-2 text-sm"><span className="font-semibold">Private note:</span> {r.reason}</p>}
+          {r.reason && (r.memberId === me || meIsLead) && <p className="mb-2 rounded-2xl bg-mint px-3 py-2 text-sm"><span className="font-semibold">Private note:</span> {r.reason}</p>}
           <ul className="flex flex-col gap-2">
             {r.moves.map((m) => {
               const t = project.tasks.find((x) => x.id === m.taskId);
               const res = r.responses[m.taskId];
               const asOther = m.toId !== me;
               return (
-                <li key={m.taskId} className="flex flex-wrap items-center gap-2 rounded-[12px] bg-bone p-3">
+                <li key={m.taskId} className="flex flex-wrap items-center gap-2 rounded-2xl bg-surface-alt p-3">
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold">{t?.title} <PointsChip points={t?.points ?? 0} /></p>
                     <p className="text-sm text-muted">Suggested for {name(m.toId)} · {m.reason}</p>
@@ -88,7 +88,7 @@ export function HelpRequests({ showResolved = false }: { showResolved?: boolean 
                       <button className="btn-secondary min-h-11" onClick={() => respond(r.id, m.taskId, "declined")} aria-label={`Decline${asOther ? ` as ${name(m.toId)}` : ""}`}><X size={16} aria-hidden /> Can't</button>
                     </div>
                   ) : (
-                    <span className={`chip ${res === "accepted" ? "bg-mint-pale text-green" : "bg-bone-light text-muted"}`}>
+                    <span className={`chip ${res === "accepted" ? "bg-mint text-green-700" : "bg-surface text-muted"}`}>
                       {res === "accepted" ? <><Check size={14} aria-hidden /> {name(m.toId)} took it</> : `${name(m.toId)} couldn't`}
                     </span>
                   )}

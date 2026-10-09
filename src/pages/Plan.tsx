@@ -72,7 +72,7 @@ export function Plan() {
             </div>
             <ul className="flex flex-col gap-2">
               {d.tasks.map((t, ti) => (
-                <li key={ti} className="flex flex-wrap items-center gap-2 rounded-[12px] bg-bone p-2">
+                <li key={ti} className="flex flex-wrap items-center gap-2 rounded-2xl bg-surface-alt p-2">
                   <input aria-label="Task title" className="input min-w-48 flex-1" value={t.title} onChange={(e) => edit((p) => { p.deliverables[di].tasks[ti].title = e.target.value; })} />
                   <select aria-label="Effort points" className="input w-24" value={t.points} onChange={(e) => edit((p) => { p.deliverables[di].tasks[ti].points = Number(e.target.value) as Points; })}>
                     {[1, 3, 5].map((n) => <option key={n} value={n}>{n} pt{n > 1 ? "s" : ""}</option>)}
@@ -91,7 +91,7 @@ export function Plan() {
             </button>
           </section>
         ))}
-        <div className="sticky bottom-20 flex flex-wrap gap-2 rounded-[12px] bg-bone/95 py-2 md:bottom-4">
+        <div className="sticky bottom-20 flex flex-wrap gap-2 rounded-2xl bg-paper/90 py-2 md:bottom-4">
           <button className="btn-primary flex-1" disabled={taskCount === 0} onClick={() => {
             const clean = { ...plan, deliverables: plan.deliverables.filter((d) => d.tasks.length > 0) };
             createProject(clean, brief);
@@ -117,24 +117,24 @@ export function Plan() {
         <p className="mt-1">Fairshare reads the brief, drafts deliverables and tasks with effort points, then splits them fairly. You review everything first.</p>
       </div>
 
-      <div role="tablist" aria-label="Brief source" className="grid grid-cols-3 gap-1 rounded-[12px] border border-line bg-bone-light p-1">
+      <div role="tablist" aria-label="Brief source" className="glass grid grid-cols-3 gap-1 rounded-full p-1">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button key={id} role="tab" aria-selected={source === id} onClick={() => setSource(id)}
-            className={`btn min-h-11 ${source === id ? "bg-mint-pale text-green" : "text-muted"}`}><Icon size={18} aria-hidden /> {label}</button>
+            className={`btn min-h-10 text-[14px] ${source === id ? "bg-ink text-white" : "text-muted hover:text-ink"}`}><Icon size={18} aria-hidden /> {label}</button>
         ))}
       </div>
 
       {source === "upload" && (
-        <label className="card flex cursor-pointer flex-col items-center gap-2 border-2 border-dashed border-line p-6 text-center hover:bg-mint-pale/40">
-          <FileUp size={28} className="text-mint" aria-hidden />
-          <span className="font-semibold text-green">Choose a .txt or .md file</span>
+        <label className="card flex cursor-pointer flex-col items-center gap-2 border-2 border-dashed border-line p-6 text-center hover:bg-mint/40">
+          <FileUp size={28} className="text-ink" aria-hidden />
+          <span className="font-semibold text-ink">Choose a .txt or .md file</span>
           <span className="text-sm text-muted">The text appears below so you can check it.</span>
           <input type="file" accept=".txt,.md,text/plain,text/markdown" className="sr-only" onChange={(e) => onFile(e.target.files?.[0])} />
         </label>
       )}
       {source === "notion" && (
         <div className="card p-4">
-          <div className="mb-2 flex items-center gap-2"><p className="flex-1 font-semibold text-green">Pick a Notion page</p><DemoTag>Sample pages</DemoTag></div>
+          <div className="mb-2 flex items-center gap-2"><p className="flex-1 font-semibold text-ink">Pick a Notion page</p><DemoTag>Sample pages</DemoTag></div>
           {!notionConnected && <p className="mb-2 text-sm text-muted">Tip: connect Notion in Settings. These sample pages work either way.</p>}
           <ul className="flex flex-col gap-1">
             {notionPages.map((p) => (
@@ -147,14 +147,14 @@ export function Plan() {
       <div>
         <div className="mb-1 flex items-end justify-between gap-2">
           <label htmlFor="brief" className="label mb-0">Assignment brief</label>
-          <button className="text-sm text-green underline underline-offset-4" onClick={() => setBrief(sampleBrief)}>Use sample brief</button>
+          <button className="text-sm text-ink underline underline-offset-4" onClick={() => setBrief(sampleBrief)}>Use sample brief</button>
         </div>
-        <textarea id="brief" className="input min-h-64 py-3 font-mono text-[15px]" value={brief} onChange={(e) => setBrief(e.target.value)}
+        <textarea id="brief" className="input min-h-64 py-3 text-[15px] leading-6" value={brief} onChange={(e) => setBrief(e.target.value)}
           placeholder="Paste the brief from your course page: what you need to hand in, word counts, due dates…" />
       </div>
 
       {status === "error" && (
-        <div role="alert" className="flex flex-wrap items-center gap-3 rounded-[12px] border-2 border-coral bg-bone-light p-4">
+        <div role="alert" className="flex flex-wrap items-center gap-3 rounded-2xl border-2 border-danger bg-surface p-4">
           <TriangleAlert className="shrink-0" aria-hidden />
           <p className="flex-1">{error}</p>
           <button className="btn-secondary" onClick={run} disabled={!brief.trim()}><RefreshCw size={18} aria-hidden /> Try again</button>

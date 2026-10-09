@@ -13,7 +13,7 @@ window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); defe
 
 function Section({ title, tag, children }: { title: string; tag?: string; children: React.ReactNode }) {
   return (
-    <section className="card flex flex-col gap-3 p-5">
+    <section className="card flex flex-col gap-3 p-5 md:p-6 [&>button]:self-start">
       <div className="flex items-center gap-2"><h2 className="flex-1 text-xl font-bold">{title}</h2>{tag && <DemoTag>{tag}</DemoTag>}</div>
       {children}
     </section>
@@ -23,10 +23,10 @@ function Section({ title, tag, children }: { title: string; tag?: string; childr
 function Toggle({ id, checked, onChange, label, hint, disabled }: { id: string; checked: boolean; onChange: (v: boolean) => void; label: string; hint?: string; disabled?: boolean }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex-1"><label htmlFor={id} className="font-semibold text-green">{label}</label>{hint && <p className="text-sm text-muted">{hint}</p>}</div>
+      <div className="flex-1"><label htmlFor={id} className="font-semibold text-ink">{label}</label>{hint && <p className="text-sm text-muted">{hint}</p>}</div>
       <button id={id} role="switch" aria-checked={checked} disabled={disabled} onClick={() => onChange(!checked)}
-        className={`relative h-8 w-14 shrink-0 cursor-pointer rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${checked ? "bg-mint" : "bg-line"}`}>
-        <span className={`absolute top-1 h-6 w-6 rounded-full bg-bone-light shadow transition-all ${checked ? "left-7" : "left-1"}`} />
+        className={`relative h-8 w-14 shrink-0 cursor-pointer rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${checked ? "bg-green" : "bg-black/15"}`}>
+        <span className={`absolute top-1 h-6 w-6 rounded-full bg-surface shadow transition-all ${checked ? "left-7" : "left-1"}`} />
       </button>
     </div>
   );
@@ -114,7 +114,7 @@ export function Settings() {
           <>
             <div className="flex flex-wrap items-center gap-2"><NotionBadge /><span className="text-sm text-muted">{s.notion.workspaceName}</span></div>
             <p className="text-sm">Two-way sync by polling every 20 seconds. If a task changes in both places, the latest edit wins. <DemoTag>Simulated Notion</DemoTag></p>
-            <div className="overflow-x-auto rounded-[12px] border border-line bg-white">
+            <div className="overflow-x-auto rounded-2xl border border-line bg-white">
               <p className="border-b border-line px-3 py-2 font-semibold">📋 {s.notion.databaseName}</p>
               <table className="w-full text-left text-sm">
                 <thead className="text-muted"><tr><th className="px-3 py-2 font-medium">Title</th><th className="px-3 py-2 font-medium">Assignee</th><th className="px-3 py-2 font-medium">Status</th><th className="px-3 py-2 font-medium">Points</th><th className="px-3 py-2 font-medium">Due date</th></tr></thead>

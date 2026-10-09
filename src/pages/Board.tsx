@@ -29,20 +29,20 @@ export function Board() {
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="flex-1 text-3xl font-extrabold">Board</h1>
-        <div role="group" aria-label="Filter" className="flex rounded-[12px] border border-line bg-bone-light p-1">
+        <div role="group" aria-label="Filter" className="glass flex h-11 items-center rounded-full p-1">
           {[false, true].map((v) => (
             <button key={String(v)} aria-pressed={mine === v} onClick={() => setMine(v)}
-              className={`btn min-h-10 px-3 ${mine === v ? "bg-mint-pale text-green" : "text-muted"}`}>{v ? "Just me" : "Everyone"}</button>
+              className={`btn min-h-9 px-4 text-[13px] ${mine === v ? "bg-ink text-white" : "text-muted hover:text-ink"}`}>{v ? "Just me" : "Everyone"}</button>
           ))}
         </div>
         <Link to="/plan" className="btn-primary"><Sparkles size={18} aria-hidden /> New plan</Link>
       </div>
 
       {/* Mobile: one column at a time */}
-      <div role="tablist" aria-label="Columns" className="grid grid-cols-4 gap-1 rounded-[12px] border border-line bg-bone-light p-1 md:hidden">
+      <div role="tablist" aria-label="Columns" className="glass grid grid-cols-4 gap-1 rounded-full p-1 md:hidden">
         {columns.map((c) => (
           <button key={c.id} role="tab" aria-selected={mobileCol === c.id} onClick={() => setMobileCol(c.id)}
-            className={`btn min-h-10 px-1 text-sm ${mobileCol === c.id ? "bg-mint-pale text-green" : "text-muted"}`}>
+            className={`btn min-h-10 px-1 text-[13px] ${mobileCol === c.id ? "bg-ink text-white" : "text-muted hover:text-ink"}`}>
             {c.label} <span className="text-xs">{tasks.filter((t) => t.status === c.id).length}</span>
           </button>
         ))}
@@ -53,13 +53,13 @@ export function Board() {
           const list = tasks.filter((t) => t.status === c.id);
           return (
             <section key={c.id} aria-label={c.label}
-              className={`${mobileCol === c.id ? "flex" : "hidden"} min-h-40 flex-col gap-3 rounded-[12px] p-2 transition-colors md:flex ${dragOver === c.id ? "bg-mint-pale" : "bg-bone-light/50"}`}
+              className={`${mobileCol === c.id ? "flex" : "hidden"} min-h-40 flex-col gap-3 rounded-2xl p-2 transition-colors md:flex ${dragOver === c.id ? "bg-mint" : "bg-black/[0.03]"}`}
               onDragOver={(e) => { e.preventDefault(); setDragOver(c.id); }}
               onDragLeave={() => setDragOver(null)}
               onDrop={(e) => { e.preventDefault(); setDragOver(null); const id = e.dataTransfer.getData("text/plain"); if (id) setStatus(id, c.id); }}>
               <h2 className="hidden px-2 pt-1 text-lg font-bold md:block">{c.label} <span className="text-base font-normal text-muted">{list.length}</span></h2>
               {list.length === 0 && (
-                <p className="rounded-[12px] border border-dashed border-line p-4 text-center text-sm text-muted">
+                <p className="rounded-2xl border border-dashed border-line p-4 text-center text-sm text-muted">
                   {c.id === "todo" ? "Nothing waiting. Nice!" : c.id === "done" ? "Finished tasks land here." : "Drag a task here, or use the arrows on a card."}
                 </p>
               )}
@@ -83,7 +83,7 @@ function TaskCard({ task, onOpen }: { task: Task; onOpen: () => void }) {
   const next = columns[idx + 1];
   return (
     <article draggable onDragStart={(e) => e.dataTransfer.setData("text/plain", task.id)}
-      className={`card cursor-grab p-3 active:cursor-grabbing ${task.assigneeId === meId ? "ring-2 ring-mint" : ""}`}>
+      className={`card cursor-grab rounded-2xl p-3.5 active:cursor-grabbing ${task.assigneeId === meId ? "ring-2 ring-green" : ""}`}>
       <button onClick={onOpen} className="block w-full text-left font-semibold text-ink hover:underline">{task.title}</button>
       <div className="mt-2 flex flex-wrap items-center gap-1.5 text-sm">
         <PointsChip points={task.points} />
@@ -110,14 +110,14 @@ function TaskDialog({ task, onClose }: { task: Task; onClose: () => void }) {
   return (
     <Modal title={task.title} onClose={onClose}>
       <div className="flex flex-col gap-4">
-        <p className="flex flex-wrap gap-2 text-sm"><PointsChip points={task.points} /><DueChip iso={task.due} /><span className="chip bg-bone text-green">{deliverable?.title}</span></p>
-        {task.reason && <p className="rounded-[12px] bg-mint-pale px-3 py-2 text-sm"><span className="font-semibold">Why this person:</span> {task.reason}</p>}
+        <p className="flex flex-wrap gap-2 text-sm"><PointsChip points={task.points} /><DueChip iso={task.due} /><span className="chip bg-surface-alt text-ink">{deliverable?.title}</span></p>
+        {task.reason && <p className="rounded-2xl bg-mint px-3 py-2 text-sm"><span className="font-semibold">Why this person:</span> {task.reason}</p>}
         <div>
           <span className="label">Status</span>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {columns.map((c) => (
               <button key={c.id} aria-pressed={task.status === c.id} onClick={() => setStatus(task.id, c.id)}
-                className={`btn min-h-11 px-2 ${task.status === c.id ? "bg-mint text-ink" : "border border-line text-green hover:bg-mint-pale"}`}>{c.label}</button>
+                className={`btn min-h-11 px-2 ${task.status === c.id ? "bg-ink text-white" : "border border-black/10 text-ink hover:bg-surface-alt"}`}>{c.label}</button>
             ))}
           </div>
         </div>
@@ -127,10 +127,10 @@ function TaskDialog({ task, onClose }: { task: Task; onClose: () => void }) {
             {members.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
           </select>
         </div>
-        {task.requiredSkills.length > 0 && <p className="text-sm"><span className="font-semibold text-green">Skills:</span> {task.requiredSkills.join(", ")}</p>}
+        {task.requiredSkills.length > 0 && <p className="text-sm"><span className="font-semibold text-ink">Skills:</span> {task.requiredSkills.join(", ")}</p>}
         {deps.length > 0 && (
           <div className="text-sm">
-            <p className="flex items-center gap-1 font-semibold text-green"><Link2 size={14} aria-hidden /> Waits on</p>
+            <p className="flex items-center gap-1 font-semibold text-ink"><Link2 size={14} aria-hidden /> Waits on</p>
             <ul className="ml-5 list-disc">{deps.map((d) => <li key={d.id}>{d.title} <span className="text-muted">({columns.find((c) => c.id === d.status)?.label})</span></li>)}</ul>
           </div>
         )}

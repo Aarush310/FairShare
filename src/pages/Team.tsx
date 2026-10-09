@@ -19,7 +19,7 @@ function WorkloadChart({ members, stats }: { members: Member[]; stats: MemberSta
       </figcaption>
       <div className="relative mt-4 flex flex-col gap-3">
         <div className="pointer-events-none absolute inset-y-0 left-[96px] right-14" aria-hidden>
-          <div className="absolute inset-y-[-6px] border-l-2 border-dashed border-green/50" style={{ left: x(1) }} />
+          <div className="absolute inset-y-[-6px] border-l-2 border-dashed border-ink/40" style={{ left: x(1) }} />
           <span className="absolute -top-6 -translate-x-1/2 text-xs text-muted" style={{ left: x(1) }}>Fair share</span>
         </div>
         {stats.map((s) => {
@@ -29,7 +29,7 @@ function WorkloadChart({ members, stats }: { members: Member[]; stats: MemberSta
             <div key={s.memberId} className="group flex items-center gap-2" title={`${m.name}: ${s.assigned} of a fair ${Math.round(s.fairShare * 10) / 10} pts (${pct(s.workloadShare)})`}>
               <span className="flex w-[88px] shrink-0 items-center gap-2 truncate text-sm font-medium"><Avatar member={m} size={24} />{first(m.name)}</span>
               <div className="relative h-7 flex-1">
-                <div className={`h-full rounded-r-[4px] transition-[width] duration-500 group-hover:opacity-85 ${heavy ? "bg-coral" : "bg-mint"}`} style={{ width: x(s.workloadShare) }} />
+                <div className={`h-full rounded-r-[4px] transition-[width] duration-500 group-hover:opacity-85 ${heavy ? "bg-danger" : "bg-green"}`} style={{ width: x(s.workloadShare) }} />
               </div>
               <span className="flex w-12 shrink-0 items-center justify-end gap-0.5 text-sm font-semibold">
                 {heavy && <TriangleAlert size={14} aria-label="Overloaded" />}{pct(s.workloadShare)}
@@ -55,7 +55,7 @@ function EditMember({ member, onClose }: { member: Member; onClose: () => void }
       }}>
         <div>
           <label htmlFor="hours" className="label">Hours per week for this project: {hours}</label>
-          <input id="hours" type="range" min={0} max={20} value={hours} onChange={(e) => setHours(Number(e.target.value))} className="h-11 w-full accent-[var(--color-mint)]" />
+          <input id="hours" type="range" min={0} max={20} value={hours} onChange={(e) => setHours(Number(e.target.value))} className="h-11 w-full accent-[var(--color-green)]" />
           <p className="text-sm text-muted">Fair shares are weighted by these hours.</p>
         </div>
         <div>
@@ -90,12 +90,12 @@ export function Team() {
               <div className="flex items-center gap-3">
                 <Avatar member={m} size={48} />
                 <div className="min-w-0 flex-1">
-                  <p className="font-display text-lg font-bold text-green">{m.name}</p>
+                  <p className="font-display text-lg font-bold text-ink">{m.name}</p>
                   <p className="text-sm text-muted">{m.role === "lead" ? "Team lead" : "Member"} · <Clock size={13} className="inline" aria-hidden /> {m.hoursPerWeek} h/week</p>
                 </div>
                 <Ring value={s.progress} label={`${pct(s.progress)} of tasks done`} />
               </div>
-              <div className="flex flex-wrap gap-1.5">{m.skills.map((k) => <span key={k} className="chip bg-mint-pale text-green">{k}</span>)}</div>
+              <div className="flex flex-wrap gap-1.5">{m.skills.map((k) => <span key={k} className="chip bg-mint text-green-700">{k}</span>)}</div>
               <p className="text-sm">{s.completed} of {s.assigned} pts done · fair share {Math.round(s.fairShare * 10) / 10} pts</p>
               <div className="flex items-center justify-between gap-2">
                 <ShareChip share={s.workloadShare} />

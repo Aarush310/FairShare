@@ -46,7 +46,7 @@ export function PanicDialog({ onClose }: { onClose: () => void }) {
               <div className="flex items-center gap-2"><p className="flex-1">Here's a suggested split. Remove anything you'd rather keep.</p><DemoTag>AI draft</DemoTag></div>
               <ul className="flex flex-col gap-2">
                 {moves.map((m) => (
-                  <li key={m.taskId} className="flex items-center gap-3 rounded-[12px] bg-bone p-3">
+                  <li key={m.taskId} className="flex items-center gap-3 rounded-2xl bg-surface-alt p-3">
                     <div className="min-w-0 flex-1">
                       <p className="font-semibold">{task(m.taskId)?.title}</p>
                       <p className="flex items-center gap-1 text-sm text-muted">

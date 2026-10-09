@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Link, useOutletContext } from "react-router";
 import { NotionBadge, TwoCol, type LayoutContext } from "../components/Layout";
 import { HelpRequests, RebalanceCard } from "../components/Proposals";
-import { Avatar, Bar, Empty, PointsChip, Ring, ShareChip, dueLabel, pct } from "../components/ui";
+import { Avatar, Bar, Empty, Eyebrow, Ring, ShareChip, dueLabel, pct } from "../components/ui";
 import { first, memberStats, projectCompletion } from "../lib/fairness";
 import { nudgesFor } from "../lib/insights";
 import { currentProject, useStore } from "../lib/store";
@@ -30,31 +30,32 @@ export function Home() {
   const main = (
     <>
       <section aria-labelledby="greet">
-        <h1 id="greet" className="text-3xl font-extrabold md:text-4xl">Hi {first(me.name)}{next ? "," : "!"}</h1>
+        <Eyebrow>{project.course} · {project.name}</Eyebrow>
+        <h1 id="greet" className="mt-1 text-[34px] font-bold leading-10 md:text-[40px] md:leading-[48px]">Hi, {first(me.name)}</h1>
         {next ? (
-          <div className="card mt-4 p-5">
-            <p className="text-muted">Your next task is</p>
-            <p className="mt-1 font-display text-2xl font-bold text-green">{next.title}</p>
-            <p className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-              <PointsChip points={next.points} />
-              <DueChip iso={next.due} />
-              {next.status === "doing" && <span className="chip bg-mint-pale text-green">In progress</span>}
-            </p>
-            {next.reason && <p className="mt-2 text-sm text-muted">Why you: {next.reason}</p>}
-            <div className="mt-4 flex flex-wrap gap-2">
+          <div className="card-ink mt-4 p-5 md:p-6">
+            <Eyebrow className="text-volt">Your next task</Eyebrow>
+            <p className="mt-1.5 text-[26px] font-bold leading-8 tracking-[-0.03em] text-white">{next.title}</p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-white/60">
+              <span><span className="numeral text-[20px] font-bold text-white">{next.points}</span> pts</span>
+              <span className={dueLabel(next.due).overdue ? "font-semibold text-[#FF8A80]" : ""}><CalendarDays size={14} className="mr-1 inline" aria-hidden />{dueLabel(next.due).text}</span>
+              {next.status === "doing" && <span className="inline-flex items-center gap-1.5"><span className="size-1.5 rounded-full bg-green" aria-hidden /> In progress</span>}
+            </div>
+            {next.reason && <p className="mt-3 rounded-2xl bg-white/[0.06] px-3.5 py-2.5 text-[13px] text-white/75">Why you: {next.reason}</p>}
+            <div className="mt-5 flex flex-wrap gap-2">
               {next.status === "todo"
-                ? <button className="btn-primary" onClick={() => setStatus(next.id, "doing")}><Play size={18} aria-hidden /> Start this task</button>
-                : <button className="btn-primary" onClick={() => setStatus(next.id, "done")}><Check size={18} aria-hidden /> Mark as done</button>}
-              <Link to="/board" className="btn-ghost">See all my tasks</Link>
+                ? <button className="btn-volt" onClick={() => setStatus(next.id, "doing")}><Play size={17} aria-hidden /> Start this task</button>
+                : <button className="btn-volt" onClick={() => setStatus(next.id, "done")}><Check size={17} strokeWidth={2.6} aria-hidden /> Mark as done</button>}
+              <Link to="/board" className="btn text-white/80 hover:bg-white/10 hover:text-white">See all my tasks</Link>
             </div>
           </div>
         ) : (
-          <div className="mt-4"><Empty icon={<Check size={32} />} title="You're all done here">Nice work. Check the team list below to see if someone could use a hand.</Empty></div>
+          <div className="mt-4"><Empty icon={<Check size={24} />} title="You're all done here">Nice work. Check the team list below to see if someone could use a hand.</Empty></div>
         )}
         {pace && (
-          <p className="mt-3 flex flex-wrap items-center gap-2 rounded-[12px] bg-mint-pale px-4 py-3">
+          <p className="mt-3 flex flex-wrap items-center gap-2 rounded-2xl bg-mint py-2 pl-4 pr-2 text-[15px] text-forest">
             <span className="flex-1">{pace.body}</span>
-            <button className="btn-ghost min-h-9 underline" onClick={openPanic}>Get help</button>
+            <button className="btn min-h-9 bg-surface px-4 text-ink shadow-float" onClick={openPanic}>Get help</button>
           </p>
         )}
       </section>
@@ -63,9 +64,9 @@ export function Home() {
       <div className="lg:hidden"><RebalanceCard /></div>
 
       <section aria-labelledby="team-h" className="card p-5">
-        <div className="mb-1 flex items-baseline justify-between gap-2">
-          <h2 id="team-h" className="text-xl font-bold">Your team</h2>
-          <Link to="/team" className="text-green underline underline-offset-4">Workload details</Link>
+        <div className="mb-1 flex items-end justify-between gap-2">
+          <div><Eyebrow>Team</Eyebrow><h2 id="team-h" className="text-[22px] font-bold leading-7">Your team</h2></div>
+          <Link to="/team" className="text-[13px] font-semibold text-green-700 hover:underline">Workload details →</Link>
         </div>
         <ul className="divide-y divide-line">
           {members.map((m) => {
@@ -85,7 +86,7 @@ export function Home() {
           })}
         </ul>
         <div className="mt-4 border-t border-line pt-4">
-          <div className="mb-2 flex justify-between gap-2"><span className="font-semibold text-green">Project completion</span><span className="font-semibold">{pct(completion)}</span></div>
+          <div className="mb-2.5 flex items-end justify-between gap-2"><span className="text-[13px] font-semibold text-muted">Project completion</span><span className="numeral text-[22px] font-bold leading-none">{pct(completion)}</span></div>
           <Bar value={completion} label="Project completion" />
         </div>
       </section>
@@ -97,22 +98,22 @@ export function Home() {
       <span className="sm:hidden"><NotionBadge /></span>
       <div className="hidden lg:block"><RebalanceCard /></div>
       <HelpRequests />
-      <section className="card p-4">
-        <h2 className="mb-2 flex items-center gap-2 text-lg font-bold"><CalendarDays size={20} aria-hidden /> Coming up</h2>
-        <ul className="flex flex-col gap-2">
+      <section className="card p-5">
+        <Eyebrow className="mb-3 text-muted">Coming up</Eyebrow>
+        <ul className="flex flex-col gap-2.5 text-[15px]">
           {deliverables.map((d) => {
             const ts = project.tasks.filter((t) => t.deliverableId === d.id);
             const done = ts.length > 0 && ts.every((t) => t.status === "done");
             return (
               <li key={d.id} className="flex items-center justify-between gap-2">
                 <span className={done ? "text-muted line-through" : ""}>{d.title}</span>
-                {done ? <span className="chip bg-mint-pale text-green"><Check size={14} aria-hidden /> Done</span> : <DueChip iso={d.due} />}
+                {done ? <span className="chip bg-mint text-green-700"><Check size={14} aria-hidden /> Done</span> : <DueChip iso={d.due} />}
               </li>
             );
           })}
         </ul>
       </section>
-      <section className="card flex flex-col gap-2 p-4">
+      <section className="card flex flex-col gap-2 p-5">
         <p className="text-sm text-muted">{myStats ? `You're carrying ${myStats.remaining} pts right now.` : ""} Feeling stretched?</p>
         <button className="btn-secondary" onClick={openPanic}><LifeBuoy size={18} aria-hidden /> I'm overloaded</button>
         <Link to="/plan" className="btn-ghost"><Sparkles size={18} aria-hidden /> Plan a new project</Link>
@@ -126,6 +127,6 @@ export function Home() {
 export function DueChip({ iso }: { iso: string }) {
   const d = dueLabel(iso);
   return d.overdue
-    ? <span className="chip bg-coral text-ink"><CalendarDays size={14} aria-hidden /> {d.text}</span>
-    : <span className="chip bg-bone text-green"><CalendarDays size={14} aria-hidden /> {d.text}</span>;
+    ? <span className="chip bg-danger-soft text-danger-ink"><CalendarDays size={13} strokeWidth={2.4} aria-hidden /> {d.text}</span>
+    : <span className="chip bg-surface-alt text-ink-3 ring-1 ring-black/[0.06]"><CalendarDays size={13} strokeWidth={2.4} aria-hidden /> {d.text}</span>;
 }

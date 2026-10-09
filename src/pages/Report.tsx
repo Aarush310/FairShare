@@ -46,7 +46,7 @@ export function Report() {
         <article className="card flex flex-col gap-5 p-5">
           <p className="text-sm text-muted">Written {ago(latest.at)} · {new Date(latest.at).toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })}</p>
           <div>
-            <div className="mb-2 flex justify-between"><span className="font-semibold text-green">{project.name} is {pct(latest.completion)} complete</span></div>
+            <div className="mb-2 flex justify-between"><span className="font-semibold text-ink">{project.name} is {pct(latest.completion)} complete</span></div>
             <Bar value={latest.completion} label="Project completion at time of digest" />
             <p className="mt-2 text-sm">{latest.deliverablesDone.length ? <>Finished: {latest.deliverablesDone.join(", ")}.</> : "No deliverables fully finished yet. That's normal this early."}</p>
           </div>
@@ -64,13 +64,13 @@ export function Report() {
               <ul className="ml-5 list-disc">{latest.risks.map((r) => <li key={r}>{r}</li>)}</ul>
             </section>
           )}
-          <section className="rounded-[12px] bg-mint-pale p-4">
+          <section className="rounded-2xl bg-mint p-4">
             <h2 className="mb-1 flex items-center gap-2 text-lg font-bold"><Lightbulb size={18} aria-hidden /> One thing to try this week</h2>
             <p>{latest.action}</p>
           </section>
           <div className="no-print flex flex-wrap gap-2">
             {latest.sentToNotion
-              ? <span className="chip bg-mint-pale text-green"><Check size={14} aria-hidden /> Posted to Notion</span>
+              ? <span className="chip bg-mint text-green-700"><Check size={14} aria-hidden /> Posted to Notion</span>
               : <button className="btn-secondary" disabled={!notionConnected} title={notionConnected ? "" : "Connect Notion in Settings first"} onClick={() => sendToNotion(latest.id)}><Send size={18} aria-hidden /> Send to Notion</button>}
             {!latest.sentToNotion && !notionConnected && <p className="self-center text-sm text-muted">Connect Notion in Settings to post digests there.</p>}
           </div>
