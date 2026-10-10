@@ -1,17 +1,89 @@
-# Fairshare - Notion x Dublin AI Week Hackathon
+<div align="center">
 
-**Group projects, split fairly.** Fairshare is an AI group-project planner for students. It reads your assignment brief, turns it into tasks, splits the work evenly across the team, and keeps it fair as the weeks go by. When someone is struggling, they can ask for help before it piles up.
+<img src="public/icon.svg" width="88" alt="Fairshare logo" />
 
-Built for the **Notion x Dublin AI Week Hackathon**.
+# Fairshare
+
+### Group projects, split fairly.
+
+An AI group-project planner for students. It turns your assignment brief into tasks,<br/>
+splits the work fairly across the team, and keeps it fair as the weeks go by.
+
+<p>
+  <img alt="React 19" src="https://img.shields.io/badge/React-19-0B100D?logo=react&logoColor=61DAFB" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-0B100D?logo=typescript&logoColor=3178C6" />
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-8-0B100D?logo=vite&logoColor=C6F36B" />
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-v4-0B100D?logo=tailwindcss&logoColor=38BDF8" />
+  <img alt="PWA" src="https://img.shields.io/badge/PWA-installable-17B26A" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-16%20passing-17B26A" />
+</p>
+
+**Built in one day at the Notion 🖤 Dublin × Dublin AI Week Student Hackathon**<br/>
+TU Dublin, Grangegorman · 9 October 2026
+
+<br/>
+
+<a href="docs/media/fairshare-demo.mp4">
+  <img src="docs/media/demo-phone.gif" width="760" alt="Fairshare demo: push notifications and the I'm overloaded flow on iPhone" />
+</a>
+
+**[▶ Watch the full 60-second demo](docs/media/fairshare-demo.mp4)**
+
+</div>
 
 ---
 
 ## The challenge
 
 > *How can we use AI and technology to improve student life?*
-> Pick one real friction in student life and use AI or technology to make it better. Narrow beats vague.
 
-We picked one friction that almost every student has hit: **the group project where the work isn't shared fairly.**
+We picked one problem almost every student has hit: **the group project where one person ends up doing all the work.**
+
+## At a glance
+
+| | |
+|---|---|
+| 📄 **Brief in, plan out** | Paste the brief or pick it from Notion. AI drafts deliverables and tasks sized at 1, 3 or 5 points. You review before anything is assigned. |
+| ⚖️ **Split fairly** | Everyone gets a fair share weighted by their available hours and skills, with a one-line reason on every task. |
+| 🔄 **Kept fair** | When the balance drifts, Fairshare proposes a small rebalance (unstarted tasks only, max 3) and the team votes. Undo is one tap away. |
+| 🆘 **"I'm overloaded"** | Ask for help privately. Fairshare suggests who has spare time; nothing moves until they say yes. |
+| 📱 **On your phone** | Installable PWA with nudges for pace, deadlines, team votes and the weekly digest. |
+| 📊 **Fair credit** | Weekly digest and a contribution report you can export as PDF or CSV, or send to Notion. |
+| 🔗 **Notion sync** | Tasks mirror to a Notion database with two-way status sync. |
+
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/media/fairness.png" alt="Home screen with workload shares and a rebalance proposal" /><br/><sub><b>Fairness you can measure.</b> Aoife is at 110%, Ben has room, so one small move is proposed.</sub></td>
+    <td width="50%"><img src="docs/media/board.png" alt="Kanban board with a reason on every card" /><br/><sub><b>Split evenly.</b> Every card says why that person got it.</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/phone-notifications.png" alt="iPhone lock screen with Fairshare notifications" /><br/><sub><b>Nudges, not nagging.</b> Pace checks, votes and the weekly digest as notifications.</sub></td>
+    <td><img src="docs/media/phone-panic.png" alt="I'm overloaded dialog on mobile" /><br/><sub><b>Overloaded? Say so.</b> A private reason and a suggested split.</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/phone-help.png" alt="Teammates receive a help request notification" /><br/><sub><b>Help, one tap away.</b> Teammates get the request and take a task.</sub></td>
+    <td><img src="docs/media/digest.png" alt="Weekly digest and contribution report" /><br/><sub><b>Fair credit, in writing.</b> Weekly digest and export.</sub></td>
+  </tr>
+</table>
+
+<details>
+<summary><b>Desktop walkthrough (GIF)</b></summary>
+<br/>
+<img src="docs/media/demo-desktop.gif" width="760" alt="Desktop walkthrough: AI planner, board and rebalance" />
+</details>
+
+## Quick start
+
+```bash
+git clone https://github.com/Aarush310/FairShare.git
+cd FairShare
+npm install
+npm run dev        # open http://localhost:5173
+```
+
+No accounts, keys or server needed. The demo opens with seeded data so the interesting moments show up straight away.
 
 ## The problem
 
@@ -75,12 +147,7 @@ All of this lives in [`src/lib/fairness.ts`](src/lib/fairness.ts) as **pure, det
 - **Weekly digest and report:** completion, deliverables done, each member's balance in supportive language, risks, and one suggested team action. Export as PDF or CSV, or send to Notion.
 - **Responsive:** floating pill navigation on desktop, a bottom tab bar on mobile.
 
-## Try the demo
-
-```bash
-npm install
-npm run dev        # http://localhost:5173
-```
+## Demo walkthrough
 
 The app opens as **Aoife**, the team lead of a four-person geography project (*Urban Heat Islands*, 18 tasks, 40 points). The data is seeded so the interesting moments are visible straight away.
 
@@ -166,9 +233,18 @@ A calm, friendly shared workspace rather than an analytics dashboard: tasks and 
 
 ## Team
 
-Built at the Notion x Dublin AI Week Hackathon by:
+Built at the **Notion 🖤 Dublin × Dublin AI Week Student Hackathon** by:
 
--Sam 
--Aarush
--Cameron
--Nathan
+| Sam | Aarush | Cameron | Nathan |
+|:---:|:---:|:---:|:---:|
+
+Original team repository: [SoakedInPlasma/FairShare](https://github.com/SoakedInPlasma/FairShare)
+
+## Thanks
+
+To **Lea Stanisavljevic** and **Nadyla Barbosa** for organising, to **Give(a)Go** and **Dublin AI Week** for bringing it together, to **Notion** for funding the event and the Hackathon HQ, to **Lovable**, **Workday** and **Hackathon Hub** for their support, and to **TU Dublin** for hosting.
+
+<div align="center">
+<br/>
+<img src="docs/media/banner.png" width="760" alt="Fairshare: Brief in. Fair split out. Kept fair." />
+</div>
