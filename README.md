@@ -1,4 +1,4 @@
-# Fairshare
+# Fairshare - Notion x Dublin AI Week Hackathon
 
 **Group projects, split fairly.** Fairshare is an AI group-project planner for students. It reads your assignment brief, turns it into tasks, splits the work evenly across the team, and keeps it fair as the weeks go by. When someone is struggling, they can ask for help before it piles up.
 
@@ -168,4 +168,7 @@ A calm, friendly shared workspace rather than an analytics dashboard: tasks and 
 
 Built at the Notion x Dublin AI Week Hackathon by:
 
-- _Add team members here_
+-Sam 
+-Aarush
+-Cameron
+-Nathan
